@@ -7,6 +7,8 @@
 #include "esp32buzz.h" //Buzz
 #elif CONFIG_HAL_BOARD_SUBTYPE == HAL_BOARD_SUBTYPE_ESP32_ICARUS
 #include "esp32icarus.h" //Alex
+#elif CONFIG_HAL_BOARD_SUBTYPE == HAL_BOARD_SUBTYPE_ESP32_S3DEVKIT
+#include "esp32s3devkit.h" //Nick
 #endif
 
 #define HAL_BOARD_NAME "ESP32"
@@ -48,14 +50,27 @@
 #define CONFIG_LWIP_STATS 0
 #define CONFIG_LWIP_PPP_SUPPORT 0
 #define CONFIG_LWIP_STATS 0
-#define CONFIG_ESP32_WIFI_CSI_ENABLED 0
-#define CONFIG_ESP32_WIFI_NVS_ENABLED 0
+
+#if CONFIG_HAL_BOARD_SUBTYPE == HAL_BOARD_SUBTYPE_ESP32_S3DEVKIT
+//#define CONFIG_ESP32_WIFI_CSI_ENABLED 0
+//#define CONFIG_ESP32_WIFI_NVS_ENABLED 0
+//#define CONFIG_ESP32_WIFI_TX_BA_WIN 0
+//#define CONFIG_ESP32_WIFI_RX_BA_WIN 0
+#else
+// #define CONFIG_ESP32_WIFI_CSI_ENABLED 0
+// #define CONFIG_ESP32_WIFI_NVS_ENABLED 0
+// #define CONFIG_ESP32_WIFI_TX_BA_WIN 0
+// #define CONFIG_ESP32_WIFI_RX_BA_WIN 0
+#endif
+
 #define CONFIG_NEWLIB_NANO_FORMAT 0
 #define CONFIG_LWIP_IP4_REASSEMBLY 0
 #define CONFIG_LWIP_IP6_REASSEMBLY 0
 #define CONFIG_LWIP_STATS 0
 #define LWIP_COMPAT_SOCKET_INET 0
 #define LWIP_COMPAT_SOCKET_ADDR 0
-#define CONFIG_ESP32_WIFI_TX_BA_WIN 0
-#define CONFIG_ESP32_WIFI_RX_BA_WIN 0
 
+// absolutely essential, as it defualts to 1324 in AP_Logger/AP_Logger.cpp, and that NOT enough.
+// ....with stack checking enabled in FreRTOS and GDB connected, GDB reports:
+// 0x4037ba21 in panic_abort (details=0x3fccdbb1 "***ERROR*** A stack overflow in task log_io has been detected.")
+#define HAL_LOGGING_STACK_SIZE 2048

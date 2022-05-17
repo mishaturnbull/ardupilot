@@ -179,7 +179,7 @@ public:
 
     // return true if ftp is disabled
     static bool ftp_disabled(void) {
-        return _singleton?(_singleton->_options & DISABLE_FTP)!=0:1;
+        return true; // _singleton?(_singleton->_options & DISABLE_FTP)!=0:1;
     }
 
     // return true if watchdog enabled
